@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #response {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Fetch User Data</h2>
+        <input type="text" id="userID" placeholder="Enter UserID" />
+        <button onclick="fetchData()">Get Data</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        async function fetchData() {
+    const userID = document.getElementById('userID').value;
+    const responseElement = document.getElementById('response');
+
+    if (!userID) {
+        responseElement.textContent = "Please enter a UserID.";
+        return;
+    }
+
+    try {
+        // for s3 usage use this + replace with sed before updating object in bucket
+        //const baseApiUrl = 'https://BASE_API__URL_SED' 
+        const baseApiUrl = 'http://127.0.0.1:3000'
+        const callUrl = `${baseApiUrl}/getDB/${userID}`;
+        const response = await fetch(callUrl);
+        const data = await response.json();
+        responseElement.textContent = JSON.stringify(data);
+    } catch (error) {
+        responseElement.textContent = "Error fetching data. Check the backend.";
+        console.error("Error:", error);
+    }
+}
+    </script>
+</body>
+</html>
